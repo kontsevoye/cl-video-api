@@ -1,0 +1,27 @@
+{
+  "observed_at": "2026-10-31",
+  "source": "Public rendered card HTML and app-js.js Videos.show_smb_popup/show_filmoscop_popup",
+  "capabilities": [
+    {
+      "id": "smb",
+      "html_selector": ".icon.smb[data-id]",
+      "source_scheme": "cnstart",
+      "mac_linux_scheme": "smb",
+      "rule": "Use the complete cnstart:// URI embedded in the card HTML. The frontend replaces only cnstart:// with smb:// on non-Windows systems. Do not infer a private server address from Video.fs.",
+      "windows_copy_rule": "For display/copy, the frontend removes cnstart: and replaces / with backslash.",
+      "optional_telemetry_operation": "logSmbLaunch",
+      "requires": "An installed handler/SMB client and network access to the returned private operator share.",
+      "not_tested": "External application launch, credentials and successful share access. No software was installed."
+    },
+    {
+      "id": "filmoscope",
+      "html_selector": ".icon.filmoscop[data-id]",
+      "source_scheme": "iptvvideo",
+      "example": "iptvvideo://mult.karelia.pro/ajax/filelist/4100",
+      "rule": "Pass the returned URI to the registered external player. The hostname is part of the URI and must not be rewritten to video.karelia.pro.",
+      "optional_telemetry_operation": "logFilmoscopeLaunch",
+      "requires": "A registered iptvvideo URI handler, linked by the website to its TV/player installer page.",
+      "not_tested": "Actual external player/device playback. No software was installed."
+    }
+  ]
+}

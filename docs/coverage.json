@@ -1,0 +1,263 @@
+{
+  "updated_at": "2026-10-31",
+  "scope": "Все выявленные публичные функции просмотра, поиска, чтения контента, доставки медиа и гостевого отображения четырёх основных каталогов; отдельно описана связанная упрощённая версия. Модерация, аккаунт и публикации исключены.",
+  "excluded": [
+    "Вход/авторизация",
+    "История",
+    "Рекомендации",
+    "Избранное",
+    "Закладки",
+    "Подписки",
+    "Прогресс просмотра",
+    "Другие записи аккаунта и публикации",
+    "Добавление/загрузка и редактирование",
+    "Модерация"
+  ],
+  "status_definitions": {
+    "covered": "Функция описана контрактом OpenAPI либо явным UI/URI-описанием; есть положительные проверки и записанные ограничения. Это не обещание всех будущих значений каталога.",
+    "legacy_only": "Код найден, но активный UI/непустой пример не найден; runtime-проверка не заявлена.",
+    "excluded": "Функция аккаунта, публикация или модерация вне области описания."
+  },
+  "features": [
+    {
+      "id": "catalogue",
+      "title": "Четыре каталога и пагинация",
+      "status": "covered",
+      "operations": [
+        "listVideos",
+        "getCataloguePage"
+      ],
+      "notes": "Chrome подтвердил фильтр и вторую страницу. В raw-клиенте нужны X-Requested-With либо new=.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "filters",
+      "title": "Фильтры и сортировка",
+      "status": "covered",
+      "operations": [
+        "listVideos"
+      ],
+      "notes": "Все отображаемые группы описаны. В проверенной выдаче несколько жанров сочетались как AND. Legacy-поля без UI не объявлены активными фильтрами.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "search",
+      "title": "Подсказки и пять полей поиска",
+      "status": "covered",
+      "operations": [
+        "searchVideos",
+        "searchVideosLegacyAlias",
+        "getSearchPage"
+      ],
+      "notes": "modes 1–5, CSV-комбинация, другие каталоги и /ajax/searh/ проверены.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "card",
+      "title": "Карточки и метаданные",
+      "status": "covered",
+      "operations": [
+        "getVideo",
+        "getVideoPage"
+      ],
+      "notes": "JSON и HTML различаются; HTML содержит данные, отсутствующие в raw-коллекциях.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "people",
+      "title": "Актёры и режиссёры",
+      "status": "covered",
+      "operations": [
+        "listPersonVideos",
+        "getPersonPage",
+        "getPersonCastPage"
+      ],
+      "notes": "Роль actor/director сохранять отдельно: nextPageUrl может ошибочно переключить director на actor.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "updates",
+      "title": "Лента новых серий и файлов",
+      "status": "covered",
+      "operations": [
+        "listUpdates",
+        "getUpdatesPage"
+      ],
+      "notes": "Chrome подтвердил пагинацию. HTML связывает файл с карточкой; raw UpdateFile не содержит videoId. Фильтров в текущем UI нет.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "top",
+      "title": "Лучшее и топ-30",
+      "status": "covered",
+      "operations": [
+        "listTopVideos",
+        "getTop30",
+        "getTopPage"
+      ],
+      "notes": "Проверены все пять периодов. Для top30 нужен html, иначе массивы пусты.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "new_cinema",
+      "title": "Недавно в кино",
+      "status": "covered",
+      "operations": [
+        "listRecentlyInCinema",
+        "getRecentlyInCinemaPage"
+      ],
+      "notes": "Проверены фильмы и мультфильмы.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "selections",
+      "title": "Подборки",
+      "status": "covered",
+      "operations": [
+        "getSelectionsPage",
+        "listSelectionVideos",
+        "getSelectionPage",
+        "listVideoSelectionOptions"
+      ],
+      "notes": "Проверены директории четырёх доменов. selected-список возвращает все варианты, а не только связи.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "cycles",
+      "title": "Киноциклы и франшизы",
+      "status": "covered",
+      "operations": [
+        "listMovieCycleVideos",
+        "getMovieCyclePage"
+      ],
+      "notes": "Публичный путь /movie_cycle/{id}; Chrome показал 7 карточек цикла Шрэка.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "random",
+      "title": "Случайные карточки",
+      "status": "covered",
+      "operations": [
+        "getRandomVideo",
+        "getRandomPage"
+      ],
+      "notes": "Рабочая /rand показывает три карточки; продолжение в UI скрыто. Legacy /ajax/random/ возвращает 500 и deprecated.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "comments",
+      "title": "Чтение комментариев",
+      "status": "covered",
+      "operations": [
+        "listOlderComments",
+        "getVideo"
+      ],
+      "notes": "Chrome загрузил ещё 30 комментариев, всего 60. Raw Comment типизирован. IP обезличены; публикация исключена.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "trailers",
+      "title": "Legacy-трейлеры",
+      "status": "legacy_only",
+      "operations": [
+        "getVideo"
+      ],
+      "notes": "В JS остался обработчик data-trailer-id и iframe trubatv.com; активный UI и непустой пример в проверенных карточках не найдены. Не придумывать DTO; обновить при появлении живого примера.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "files",
+      "title": "Сезоны, серии, озвучки, версии и extras",
+      "status": "covered",
+      "operations": [
+        "listFiles",
+        "listStudios"
+      ],
+      "notes": "Проверены театральная/расширенная версии и многосезонная выдача. additionalFiles пуст в доступных примерах; его непустая модель оставлена открытой, HTML fallback описан.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "playback",
+      "title": "Плеер и доставка HLS/MP4",
+      "status": "covered",
+      "operations": [
+        "isFileDiskUnavailable",
+        "getHlsPlaylist",
+        "getHlsSegment",
+        "getConvertedMp4",
+        "getDavMp4"
+      ],
+      "notes": "Chrome: кадр аниме, пропуск преролла, mute, перемотка, пауза. HLS/MP4 Range работают. Альтернативный /dav дал 403; это описанный отказ, не рабочая ссылка.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "downloads",
+      "title": "Скачивание оригиналов и MP4",
+      "status": "covered",
+      "operations": [
+        "listFiles",
+        "getOriginalFile"
+      ],
+      "notes": "206, Content-Range и Content-Disposition подтверждены. Читались только первые 64 КиБ; ID разных вариантов может совпадать.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "external_players",
+      "title": "SMB/CNStart и Фильмоскоп",
+      "status": "covered",
+      "operations": [
+        "logSmbLaunch",
+        "logFilmoscopeLaunch"
+      ],
+      "notes": "URI-контракт и счётчики описаны. Сторонние приложения не устанавливались и не запускались; оборудование не проверялось.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "presentation",
+      "title": "Темы, плитка/список и навигация",
+      "status": "covered",
+      "operations": [
+        "setGuestSkin",
+        "setGuestLayout"
+      ],
+      "notes": "В отдельном Chrome изменена тема и получены 20 элементов классического списка. Навигация и контролы — локальное UI/cookie-состояние.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "info",
+      "title": "Правила и правообладатели",
+      "status": "covered",
+      "operations": [
+        "getRulesHtml",
+        "getCopyrightHtml",
+        "getRightsHolderPage",
+        "getVideoReportForm"
+      ],
+      "notes": "Правила/копирайт — JSON-строки HTML. Форма прочитана; сообщения не отправлялись, CSRF обезличен.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "simplified",
+      "title": "Упрощённая версия",
+      "status": "covered",
+      "operations": [
+        "getSimpleCatalogue",
+        "getSimpleCataloguePage",
+        "searchSimpleCatalogue",
+        "getSimpleVideo",
+        "getSimplePlayer"
+      ],
+      "notes": "Отдельный HTML-контракт v128. Chrome подтвердил страницу 2 и native video с MP4. Современный JSON API здесь не работает как замена base URL.",
+      "checked_at": "2026-10-31"
+    },
+    {
+      "id": "contributions",
+      "title": "Пользовательские записи и модерация",
+      "status": "excluded",
+      "operations": [],
+      "notes": "Вход, история, рекомендации, избранное, закладки, подписки, прогресс, лайки, публикации, загрузки, редактирование и модерация исключены. Гостевые add/files формы дали 500; успешные контракты не заявлены.",
+      "checked_at": "2026-10-31"
+    }
+  ],
+  "maintenance": "При изменении контракта обновить OpenAPI, руководство и реестр: даты, операции, статусы и ограничения. Согласовать coverage.md с этим реестром и запустить npm run check и npm run build. Автоматическая валидация не подтверждает работу сервиса."
+}

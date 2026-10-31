@@ -1,0 +1,395 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Karelia simplified public HTML interface",
+    "version": "0.2.0",
+    "description": "Separate frontend v128 at *.s.karelia.pro, linked as the simplified/SmartTV alternative. This is not a drop-in base URL for the modern JSON API: /ajax/filelist returned a redirect to HTML. Account operations are excluded."
+  },
+  "servers": [
+    {
+      "url": "http://video.s.karelia.pro"
+    },
+    {
+      "url": "http://serial.s.karelia.pro"
+    },
+    {
+      "url": "http://mult.s.karelia.pro"
+    },
+    {
+      "url": "http://anime.s.karelia.pro"
+    }
+  ],
+  "tags": [
+    {
+      "name": "LegacyHtml",
+      "description": "Public HTML navigation and native MP4 player"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "getSimpleCatalogue",
+        "summary": "Simplified catalogue landing page",
+        "tags": [
+          "LegacyHtml"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Legacy singular genre ID; differs from the modern genres CSV."
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Legacy country ID; the UI also exposes negative grouping values."
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Legacy year selector; default observed 3. Do not interpret it as a literal release year."
+          },
+          {
+            "name": "on_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Items per page; 20 verified."
+          },
+          {
+            "name": "sorting",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "sorting"
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "sort_order"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full HTML, not the modern AJAX JSON envelope.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "live-anonymous-http"
+      }
+    },
+    "/{page}": {
+      "get": {
+        "operationId": "getSimpleCataloguePage",
+        "summary": "Simplified catalogue pagination",
+        "tags": [
+          "LegacyHtml"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "page"
+          },
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Legacy singular genre ID; differs from the modern genres CSV."
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Legacy country ID; the UI also exposes negative grouping values."
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Legacy year selector; default observed 3. Do not interpret it as a literal release year."
+          },
+          {
+            "name": "on_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Items per page; 20 verified."
+          },
+          {
+            "name": "sorting",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "sorting"
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "sort_order"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full HTML, not the modern AJAX JSON envelope.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "live-anonymous-http"
+      }
+    },
+    "/search": {
+      "get": {
+        "operationId": "searchSimpleCatalogue",
+        "summary": "Simplified full search",
+        "tags": [
+          "LegacyHtml"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "query"
+          },
+          {
+            "name": "name[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Legacy field names, e.g. name, actor, director, taken from page links."
+          },
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Legacy singular genre ID; differs from the modern genres CSV."
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Legacy country ID; the UI also exposes negative grouping values."
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Legacy year selector; default observed 3. Do not interpret it as a literal release year."
+          },
+          {
+            "name": "on_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Items per page; 20 verified."
+          },
+          {
+            "name": "sorting",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "sorting"
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "sort_order"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full HTML, not the modern AJAX JSON envelope.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "live-anonymous-http"
+      }
+    },
+    "/video/{videoId}": {
+      "get": {
+        "operationId": "getSimpleVideo",
+        "summary": "Simplified card and download listing",
+        "tags": [
+          "LegacyHtml"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "videoId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full HTML, not the modern AJAX JSON envelope.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "live-anonymous-http"
+      }
+    },
+    "/watch/{videoId}": {
+      "get": {
+        "operationId": "getSimplePlayer",
+        "summary": "Native video page with progressive MP4 URL",
+        "tags": [
+          "LegacyHtml"
+        ],
+        "description": "Observed <video autoplay controls ... src=...mp4>. Resolve the returned source URL; do not reuse the modern HLS URL construction.",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "videoId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full HTML, not the modern AJAX JSON envelope.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "live-anonymous-http"
+      }
+    }
+  },
+  "x-observed-at": "2026-10-31"
+}

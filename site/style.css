@@ -1,0 +1,56 @@
+:root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #253248; background: #fff; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #2366ba; text-decoration: none; }
+a:hover { text-decoration: underline; }
+[hidden] { display: none !important; }
+.sidebar { position: fixed; inset: 0 auto 0 0; width: 255px; padding: 28px 18px; background: #f6f8fb; border-right: 1px solid #e0e5ed; overflow-y: auto; display: flex; flex-direction: column; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 0 10px 24px; font-weight: 700; font-size: 19px; color: #182b45; }
+.brand:hover { text-decoration: none; }
+.brand-icon { display: grid; place-items: center; width: 37px; height: 37px; border-radius: 10px; color: white; background: #2865a5; }
+.brand small { display: block; font-size: 11px; color: #69788c; font-weight: 400; margin-top: 5px; }
+.release { margin: 0 10px 10px; color: #2366ba; font-size: 12px; font-weight: 600; }
+.release span { margin-left: 8px; color: #69788c; font-weight: 400; }
+.example-note { margin: 24px 22px 0; padding: 16px 18px; background: #f2f6fb; border: 1px solid #dce6f2; border-radius: 8px; font-size: 13px; line-height: 1.6; color: #4b607a; }
+nav h2 { margin: 20px 10px 8px; color: #758296; font-size: 11px; text-transform: uppercase; letter-spacing: .09em; }
+nav a { display: block; padding: 10px 12px; border-radius: 6px; margin: 2px 0; color: #46566d; font-size: 14px; line-height: 1.4; }
+nav a:hover { background: #eaf0f7; text-decoration: none; }
+nav a.active { background: #e2ecf9; color: #174e8e; font-weight: 600; }
+.sidebar-note { margin: auto 10px 0; padding-top: 30px; color: #78879a; font-size: 12px; line-height: 1.8; }
+body > main { margin-left: 255px; min-width: 0; }
+.page-header { min-height: 70px; padding: 22px 38px; border-bottom: 1px solid #e6eaf0; display: flex; gap: 16px; align-items: center; justify-content: space-between; font-size: 14px; }
+.page-header > span { font-weight: 600; }
+.page-header a { color: #718098; font-size: 12px; white-space: nowrap; }
+.markdown { max-width: 1100px; padding: 28px 40px 90px; line-height: 1.7; font-size: 15px; overflow-wrap: anywhere; }
+.markdown h1 { font-size: 31px; line-height: 1.25; color: #182b45; margin-bottom: 28px; }
+.markdown h2 { font-size: 23px; color: #223a57; margin-top: 40px; padding-bottom: 9px; border-bottom: 1px solid #e9edf2; }
+.markdown h3 { font-size: 18px; margin-top: 30px; }
+.markdown pre { padding: 18px 20px; border-radius: 8px; background: #f3f6fa; border: 1px solid #e3e8ef; overflow-x: auto; line-height: 1.55; }
+.markdown code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .86em; }
+.markdown :not(pre) > code { background: #eff3f8; padding: 2px 5px; border-radius: 4px; }
+.markdown table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 22px 0; }
+.markdown th, .markdown td { padding: 11px 13px; text-align: left; vertical-align: top; border: 1px solid #dfe5ed; }
+.markdown th { background: #f2f5f9; font-weight: 600; }
+.markdown li { margin: 7px 0; }
+.markdown img { max-width: 100%; }
+.markdown blockquote { margin: 20px 0; padding-left: 18px; border-left: 3px solid #bacde5; color: #58697e; }
+#swagger { padding: 16px 22px 60px; }
+.swagger-ui .wrapper { padding: 0; }
+.swagger-ui .info { margin: 20px 0 30px; }
+.swagger-ui .info .title { font-size: 27px; }
+.swagger-ui .info .title small { top: 0; }
+#error { margin: 30px 40px; padding: 18px; background: #fff3ef; border: 1px solid #e8b5a5; border-radius: 8px; }
+@media (max-width: 760px) {
+  .sidebar { position: static; width: 100%; padding: 18px; border-right: 0; border-bottom: 1px solid #e0e5ed; }
+  .brand { padding-bottom: 4px; }
+  nav h2 { margin-top: 14px; }
+  nav > div { display: flex; flex-wrap: wrap; gap: 3px; }
+  nav a { padding: 7px 10px; font-size: 12px; }
+  .sidebar-note { display: none; }
+  body > main { margin-left: 0; }
+  .page-header { padding: 17px 20px; }
+  .markdown { padding: 18px 20px 50px; }
+  .markdown h1 { font-size: 26px; }
+  .markdown table { display: block; overflow-x: auto; }
+  #swagger { padding: 12px; }
+}

@@ -1,0 +1,13 @@
+{
+  "documents": [
+    { "path": "README.md", "title": "Что это за API" },
+    { "path": "docs/api.md", "title": "Запросы и ответы" },
+    { "path": "docs/coverage.md", "title": "Статус описания" },
+    { "path": "docs/media.md", "title": "Медиа и плееры" }
+  ],
+  "specs": [
+    { "path": "openapi.json", "title": "Основной API · 37 операций" },
+    { "path": "openapi-media.json", "title": "Медиа · 5 операций" },
+    { "path": "openapi-simple.json", "title": "Упрощённый сайт · 5 операций" }
+  ]
+}

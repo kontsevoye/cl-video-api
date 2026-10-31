@@ -1,0 +1,688 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Karelia returned media resources",
+    "version": "0.2.0",
+    "description": "Companion to openapi.json. Resource-oriented HTTP, not catalogue JSON. HLS playback/seek was observed in Chrome and bounded 64 KiB Range probes verified transport. Media URLs may change. The original encoded path needs a pass-through transport."
+  },
+  "servers": [
+    {
+      "url": "http://stream1.karelia.pro"
+    },
+    {
+      "url": "http://stream2.karelia.pro"
+    },
+    {
+      "url": "http://stream3.karelia.pro"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Media",
+      "description": "Returned HLS, MP4 and original-file URLs"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/hls/{bucket}/{asset}/index.m3u8": {
+      "get": {
+        "operationId": "getHlsPlaylist",
+        "summary": "HLS VOD playlist",
+        "description": "Captured VOD playlist version 3, target duration 10 seconds, relative MPEG-TS segment references. No encryption key or separate audio playlist appeared in this sample; do not assume that for every title.",
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque bucket component from returned URL."
+          },
+          {
+            "name": "asset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque asset name including .mp4 suffix."
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional byte range, e.g. bytes=0-65535. Keep bounded probes small; no full video download is needed to validate metadata."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "application/vnd.apple.mpegurl": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "application/vnd.apple.mpegurl": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied; directly observed for the /dav alternative. Do not treat a returned URL as proof of anonymous availability.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "bounded-http-and-chrome",
+        "x-returned-url-policy": "Use the complete URL returned by filelist. Do not guess bucket, asset, host or encoding."
+      }
+    },
+    "/hls/{bucket}/{asset}/{segment}": {
+      "get": {
+        "operationId": "getHlsSegment",
+        "summary": "HLS transport-stream segment",
+        "description": "",
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque bucket component from returned URL."
+          },
+          {
+            "name": "asset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque asset name including .mp4 suffix."
+          },
+          {
+            "name": "segment",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Resolve the exact relative segment name against the playlist URL; observed seg-1-v1-a1.ts."
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional byte range, e.g. bytes=0-65535. Keep bounded probes small; no full video download is needed to validate metadata."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "video/MP2T": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "video/MP2T": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied; directly observed for the /dav alternative. Do not treat a returned URL as proof of anonymous availability.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "bounded-http-and-chrome",
+        "x-returned-url-policy": "Use the complete URL returned by filelist. Do not guess bucket, asset, host or encoding."
+      }
+    },
+    "/{bucket}/{asset}": {
+      "get": {
+        "operationId": "getConvertedMp4",
+        "summary": "Converted progressive MP4",
+        "description": "Progressive URL is exposed by the simplified player and converted download entries. Transport also verified by a bounded prefix probe.",
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque bucket component from returned URL."
+          },
+          {
+            "name": "asset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque asset name including .mp4 suffix."
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional download filename as returned by filelist."
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional byte range, e.g. bytes=0-65535. Keep bounded probes small; no full video download is needed to validate metadata."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied; directly observed for the /dav alternative. Do not treat a returned URL as proof of anonymous availability.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "bounded-http-and-html",
+        "x-returned-url-policy": "Use the complete URL returned by filelist. Do not guess bucket, asset, host or encoding."
+      }
+    },
+    "/dav/{bucket}/{asset}": {
+      "get": {
+        "operationId": "getDavMp4",
+        "summary": "Alternative MP4 URL present in metadata (anonymous access denied)",
+        "description": "Returned by update/detail serializers, but its anonymous Range probe returned HTTP 403. Prefer the working filelist playback/download URL. Successful /dav access is not established.",
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque bucket component from returned URL."
+          },
+          {
+            "name": "asset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque asset name including .mp4 suffix."
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional byte range, e.g. bytes=0-65535. Keep bounded probes small; no full video download is needed to validate metadata."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied; directly observed for the /dav alternative. Do not treat a returned URL as proof of anonymous availability.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "live-denied",
+        "x-returned-url-policy": "Use the complete URL returned by filelist. Do not guess bucket, asset, host or encoding."
+      }
+    },
+    "/videofiles/{encodedPath}": {
+      "get": {
+        "operationId": "getOriginalFile",
+        "summary": "Original downloadable file",
+        "description": "This operation uses fsN servers. Same file ID can have original and converted download variants; select by returned URL.",
+        "tags": [
+          "Media"
+        ],
+        "parameters": [
+          {
+            "name": "encodedPath",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Already percent-encoded opaque legacy path, potentially containing encoded slashes and non-UTF-8 bytes. Preserve it exactly. A generator's normal UTF-8 encoding can double-encode it; use ENCODE_PATH: value => value for already encoded returned paths, or fetch the returned full URL directly."
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returned UTF-8 filename query."
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional byte range, e.g. bytes=0-65535. Keep bounded probes small; no full video download is needed to validate metadata."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Resource bytes; inspect Content-Type and Content-Range.",
+            "headers": {
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed bytes START-END/TOTAL with HTTP 206."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Size of this returned range, not necessarily the whole asset."
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Original downloads can provide UTF-8 filename*."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Observed * on the tested HLS playlist and segment; not returned by the tested original file."
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied; directly observed for the /dav alternative. Do not treat a returned URL as proof of anonymous availability.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-verification": "bounded-http-and-chrome",
+        "x-returned-url-policy": "Use the complete URL returned by filelist. Do not guess bucket, asset, host or encoding."
+      },
+      "servers": [
+        {
+          "url": "http://fs5.karelia.pro"
+        },
+        {
+          "url": "http://fs1.karelia.pro"
+        }
+      ]
+    }
+  },
+  "x-observed-at": "2026-10-31"
+}
